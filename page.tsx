@@ -1,213 +1,136 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Phone, Mail, MapPin, Clock, FileText, Users, Calendar, ChevronRight, Star, CheckCircle, AlertCircle } from 'lucide-react'
-import Link from 'next/link'
+import { Phone, Mail, MapPin, Clock, Send, MessageSquare, Users, Building, Calendar, CheckCircle, AlertCircle } from 'lucide-react'
 
-const services = [
+const offices = [
   {
-    id: 'domicile',
-    title: 'Domicile Certificate',
-    description: 'Apply for domicile certificate to prove your residence in a specific district',
-    icon: '🏠',
-    category: 'Certificates',
-    processingTime: '15-20 working days',
-    fee: 'PKR 500',
-    status: 'available',
-    rating: 4.8,
-    reviews: 245,
-    features: [
-      'Online application process',
-      'Document verification',
-      'Fast processing',
-      'Home delivery available'
-    ],
-    requirements: [
-      'CNIC (Front & Back)',
-      'Recent Photograph',
-      'Proof of Residence',
-      'Father\'s CNIC'
-    ],
-    benefits: [
-      { title: 'Legal Recognition', description: 'Official proof of residence for all legal purposes' },
-      { title: 'Educational Benefits', description: 'Required for admission to educational institutions' },
-      { title: 'Employment Verification', description: 'Essential for government job applications' },
-      { title: 'Property Rights', description: 'Required for property transactions in your district' }
-    ],
-    process: [
-      { title: 'Online Application', description: 'Fill out the application form with personal details', duration: '10 minutes' },
-      { title: 'Document Upload', description: 'Upload required documents and photographs', duration: '5 minutes' },
-      { title: 'Fee Payment', description: 'Pay the processing fee online or at designated bank', duration: '1-2 days' },
-      { title: 'Verification', description: 'Your documents will be verified by the authorities', duration: '10-15 days' },
-      { title: 'Certificate Issuance', description: 'Receive your domicile certificate', duration: '2-3 days' }
-    ],
-    faqs: [
-      { question: 'How long does it take to get a domicile certificate?', answer: 'The process typically takes 15-20 working days after document verification.' },
-      { question: 'Can I apply for domicile in a district where I don\'t reside?', answer: 'No, you must be a permanent resident of the district for at least 6 months.' },
-      { question: 'What documents are required for domicile?', answer: 'CNIC, recent photographs, proof of residence, and father\'s CNIC are required.' }
-    ]
+    id: 1,
+    name: 'DC Office Main Complex',
+    address: 'Civil Lines, District Headquarters',
+    city: 'Lahore',
+    phone: '+92-42-99212345',
+    email: 'dc.lahore@dc.gov.pk',
+    hours: '9:00 AM - 5:00 PM',
+    services: ['All Services', 'Emergency Processing', 'Senior Citizen Support'],
+    coordinates: '31.5204° N, 74.3587° E'
   },
   {
-    id: 'driving-license',
-    title: 'Driving License',
-    description: 'Apply for new driving license or renew your existing license',
-    icon: '🚗',
-    category: 'Licenses',
-    processingTime: '20-30 working days',
-    fee: 'PKR 1,500',
-    status: 'available',
-    rating: 4.6,
-    reviews: 189,
-    features: [
-      'Learner permit available',
-      'Theory test preparation',
-      'Practical test scheduling',
-      'License renewal service'
-    ],
-    requirements: [
-      'CNIC (Front & Back)',
-      'Recent Photograph',
-      'Medical Certificate',
-      'Learner Permit (if applicable)'
-    ]
+    id: 2,
+    name: 'Citizen Facilitation Center',
+    address: 'Gulberg Main Boulevard',
+    city: 'Lahore',
+    phone: '+92-42-99212346',
+    email: 'cfc.lahore@dc.gov.pk',
+    hours: '9:00 AM - 8:00 PM',
+    services: ['Application Submission', 'Document Verification', 'Payment Collection'],
+    coordinates: '31.5100° N, 74.3500° E'
   },
   {
-    id: 'birth-certificate',
-    title: 'Birth Certificate',
-    description: 'Apply for birth certificate for newborns or obtain certified copy',
-    icon: '👶',
-    category: 'Certificates',
-    processingTime: '7-10 working days',
-    fee: 'PKR 200',
-    status: 'available',
-    rating: 4.9,
-    reviews: 312,
-    features: [
-      'Same-day registration',
-      'Certified copies',
-      'Online verification',
-      'Multiple language support'
-    ],
-    requirements: [
-      'Birth Proof',
-      'Parents\' CNIC',
-      'Hospital Records',
-      'Application Form'
-    ]
-  },
-  {
-    id: 'death-certificate',
-    title: 'Death Certificate',
-    description: 'Apply for death certificate for legal and official purposes',
-    icon: '📋',
-    category: 'Certificates',
-    processingTime: '5-7 working days',
-    fee: 'PKR 300',
-    status: 'available',
-    rating: 4.7,
-    reviews: 98,
-    features: [
-      'Urgent processing',
-      'Legal documentation',
-      'Insurance claims support',
-      'Family records update'
-    ],
-    requirements: [
-      'Death Proof',
-      'Deceased CNIC',
-      'Applicant CNIC',
-      'Medical Report'
-    ]
-  },
-  {
-    id: 'marriage-certificate',
-    title: 'Marriage Certificate',
-    description: 'Apply for marriage certificate for legal recognition of marriage',
-    icon: '💍',
-    category: 'Certificates',
-    processingTime: '10-15 working days',
-    fee: 'PKR 800',
-    status: 'available',
-    rating: 4.8,
-    reviews: 156,
-    features: [
-      'Legal registration',
-      'International recognition',
-      'Name change service',
-      'Family documentation'
-    ],
-    requirements: [
-      'CNIC of Both Spouses',
-      'Marriage Proof',
-      'Photographs',
-      'Witnesses Information'
-    ]
-  },
-  {
-    id: 'character-certificate',
-    title: 'Character Certificate',
-    description: 'Apply for character certificate for employment or immigration purposes',
-    icon: '👤',
-    category: 'Certificates',
-    processingTime: '7-10 working days',
-    fee: 'PKR 400',
-    status: 'available',
-    rating: 4.5,
-    reviews: 87,
-    features: [
-      'Police verification',
-      'Background check',
-      'International format',
-      'Fast processing'
-    ],
-    requirements: [
-      'CNIC (Front & Back)',
-      'Recent Photograph',
-      'Proof of Residence',
-      'Purpose Letter'
-    ]
+    id: 3,
+    name: 'Sub-Divisional Office',
+    address: 'Model Town Extension',
+    city: 'Lahore',
+    phone: '+92-42-99212347',
+    email: 'sdo.modeltown@dc.gov.pk',
+    hours: '9:00 AM - 4:00 PM',
+    services: ['Local Applications', 'Residence Verification', 'Community Services'],
+    coordinates: '31.5300° N, 74.3700° E'
   }
 ]
 
-const categories = ['All', 'Certificates', 'Licenses']
+const departments = [
+  {
+    name: 'Revenue Department',
+    head: 'Mr. Ahmed Hassan',
+    phone: '+92-42-99212348',
+    email: 'revenue.dc@dc.gov.pk',
+    services: ['Land Records', 'Property Tax', 'Domicile Certificates']
+  },
+  {
+    name: 'Registration Department',
+    head: 'Ms. Sara Ahmed',
+    phone: '+92-42-99212349',
+    email: 'registration.dc@dc.gov.pk',
+    services: ['Birth/Death Certificates', 'Marriage Registration', 'NADRA Services']
+  },
+  {
+    name: 'License Department',
+    head: 'Mr. Omar Farooq',
+    phone: '+92-42-99212350',
+    email: 'license.dc@dc.gov.pk',
+    services: ['Driving Licenses', 'Business Licenses', 'Vehicle Registration']
+  },
+  {
+    name: 'IT Department',
+    head: 'Mr. Bilal Khan',
+    phone: '+92-42-99212351',
+    email: 'it.support@dc.gov.pk',
+    services: ['Online Portal Support', 'Technical Issues', 'Digital Services']
+  }
+]
 
-export default function ServicesPage() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [sortBy, setSortBy] = useState('popular')
-
-  const filteredServices = services.filter(service => {
-    const matchesSearch = service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         service.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'All' || service.category === selectedCategory
-    return matchesSearch && matchesCategory
+export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: '',
+    department: ''
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
-  const sortedServices = [...filteredServices].sort((a, b) => {
-    switch (sortBy) {
-      case 'popular':
-        return b.reviews - a.reviews
-      case 'rating':
-        return b.rating - a.rating
-      case 'price-low':
-        return parseInt(a.fee.replace(/[^\d]/g, '')) - parseInt(b.fee.replace(/[^\d]/g, ''))
-      case 'price-high':
-        return parseInt(b.fee.replace(/[^\d]/g, '')) - parseInt(a.fee.replace(/[^\d]/g, ''))
-      default:
-        return 0
-    }
-  })
-
-  const getStatusColor = (status: string) => {
-    return status === 'available' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
   }
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      'Certificates': 'bg-blue-100 text-blue-800',
-      'Licenses': 'bg-purple-100 text-purple-800'
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      // Send notification (in real app, this would be an actual API call)
+      const response = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: 'contact-form',
+          type: 'info',
+          title: 'New Contact Form Submission',
+          message: `From: ${formData.name} (${formData.email}) - Subject: ${formData.subject}`,
+          email: 'support@dc.gov.pk'
+        }),
+      })
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+          department: ''
+        })
+      } else {
+        setSubmitStatus('error')
+      }
+    } catch (error) {
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
     }
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800'
   }
 
   return (
@@ -217,180 +140,338 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Our Services
+              Contact Us
             </h1>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Access all government services online. Apply for certificates, licenses, and more with ease.
+              Get in touch with our team for any questions, support, or assistance with your applications.
             </p>
-            
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search services..."
-                  className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Contact Options */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Phone className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Helpline</h3>
+              <p className="text-gray-600 mb-4">24/7 Support Available</p>
+              <a href="tel:1234-567890" className="text-blue-600 hover:text-blue-800 font-medium">
+                1234-567890
+              </a>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Mail className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Support</h3>
+              <p className="text-gray-600 mb-4">Quick Response</p>
+              <a href="mailto:support@dc.gov.pk" className="text-blue-600 hover:text-blue-800 font-medium">
+                support@dc.gov.pk
+              </a>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Visit Office</h3>
+              <p className="text-gray-600 mb-4">In-Person Support</p>
+              <a href="/districts" className="text-blue-600 hover:text-blue-800 font-medium">
+                Find Locations
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form and Offices */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Form */}
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">Send us a Message</h2>
+              
+              {submitStatus === 'success' && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    <span className="text-green-800">Message sent successfully! We'll get back to you soon.</span>
+                  </div>
+                </div>
+              )}
+
+              {submitStatus === 'error' && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
+                    <span className="text-red-800">Failed to send message. Please try again.</span>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="John Doe"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="+92-300-1234567"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-2">
+                      Department
+                    </label>
+                    <select
+                      id="department"
+                      name="department"
+                      value={formData.department}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Select Department</option>
+                      {departments.map((dept) => (
+                        <option key={dept.name} value={dept.name}>
+                          {dept.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                    Subject *
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="How can we help you?"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows={5}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Tell us more about your inquiry..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-5 w-5 mr-2" />
+                      Send Message
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+
+            {/* Office Locations */}
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">Office Locations</h2>
+              <div className="space-y-6">
+                {offices.map((office) => (
+                  <div key={office.id} className="bg-white rounded-lg shadow-lg p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900">{office.name}</h3>
+                        <p className="text-gray-600">{office.address}, {office.city}</p>
+                      </div>
+                      <div className="bg-blue-100 rounded-full p-2">
+                        <Building className="h-5 w-5 text-blue-600" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center text-sm">
+                        <Phone className="h-4 w-4 text-gray-400 mr-2" />
+                        <a href={`tel:${office.phone}`} className="text-blue-600 hover:text-blue-800">
+                          {office.phone}
+                        </a>
+                      </div>
+
+                      <div className="flex items-center text-sm">
+                        <Mail className="h-4 w-4 text-gray-400 mr-2" />
+                        <a href={`mailto:${office.email}`} className="text-blue-600 hover:text-blue-800">
+                          {office.email}
+                        </a>
+                      </div>
+
+                      <div className="flex items-center text-sm">
+                        <Clock className="h-4 w-4 text-gray-400 mr-2" />
+                        <span className="text-gray-600">{office.hours}</span>
+                      </div>
+
+                      <div className="flex items-start text-sm">
+                        <MapPin className="h-4 w-4 text-gray-400 mr-2 mt-0.5" />
+                        <span className="text-gray-600">{office.coordinates}</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t">
+                      <p className="text-sm font-medium text-gray-900 mb-2">Services:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {office.services.map((service, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                          >
+                            {service}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Filters and Sort */}
-      <section className="py-8 bg-white border-b">
+      {/* Departments */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            {/* Categories */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-
-            {/* Sort */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Sort by:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="popular">Most Popular</option>
-                <option value="rating">Highest Rated</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedServices.map((service) => (
-              <div key={service.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-4xl">{service.icon}</div>
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(service.category)}`}>
-                        {service.category}
-                      </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(service.status)}`}>
-                        {service.status}
-                      </span>
-                    </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Department Contacts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {departments.map((dept, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-6">
+                <div className="flex items-center mb-4">
+                  <Users className="h-8 w-8 text-blue-600 mr-3" />
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{dept.name}</h3>
+                    <p className="text-sm text-gray-600">{dept.head}</p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{service.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-                  
-                  {/* Rating */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${i < Math.floor(service.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600">{service.rating} ({service.reviews} reviews)</span>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <Phone className="h-4 w-4 text-gray-400 mr-2" />
+                    <a href={`tel:${dept.phone}`} className="text-blue-600 hover:text-blue-800">
+                      {dept.phone}
+                    </a>
+                  </div>
+
+                  <div className="flex items-center text-sm">
+                    <Mail className="h-4 w-4 text-gray-400 mr-2" />
+                    <a href={`mailto:${dept.email}`} className="text-blue-600 hover:text-blue-800">
+                      {dept.email}
+                    </a>
                   </div>
                 </div>
 
-                {/* Details */}
-                <div className="p-6">
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Processing Time:</span>
-                      <span className="text-sm font-medium">{service.processingTime}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Fee:</span>
-                      <span className="text-sm font-bold text-blue-600">{service.fee}</span>
-                    </div>
-                  </div>
-
-                  {/* Features */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Features:</h4>
-                    <ul className="space-y-1">
-                      {service.features.slice(0, 3).map((feature, index) => (
-                        <li key={index} className="flex items-center text-sm text-gray-600">
-                          <CheckCircle className="h-3 w-3 text-green-500 mr-2 flex-shrink-0" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    <Link
-                      href={`/services/${service.id}`}
-                      className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center"
-                    >
-                      View Details
-                    </Link>
-                    <Link
-                      href={`/apply/${service.id}`}
-                      className="flex-1 border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors font-medium text-center"
-                    >
-                      Apply Now
-                    </Link>
-                  </div>
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <p className="text-xs text-gray-600">Services:</p>
+                  <ul className="mt-1 space-y-1">
+                    {dept.services.map((service, idx) => (
+                      <li key={idx} className="text-xs text-gray-700">• {service}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             ))}
           </div>
-
-          {sortedServices.length === 0 && (
-            <div className="text-center py-12">
-              <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No services found</h3>
-              <p className="text-gray-500">Try adjusting your search or filters</p>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-blue-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Need Help with Your Application?</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Our support team is here to help you with any questions about our services.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Contact Support
-            </Link>
-            <Link
-              href="/track"
-              className="border border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors font-medium"
-            >
-              Track Application
-            </Link>
+      {/* FAQ Section */}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+          
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">How long does it take to process applications?</h3>
+              <p className="text-gray-600">Processing times vary by service type. Most certificates take 7-20 working days, while licenses may take 20-30 days. You can track your application status online.</p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">What documents do I need for my application?</h3>
+              <p className="text-gray-600">Required documents vary by service. Generally, you'll need your CNIC, recent photographs, and service-specific documents. Check the service page for detailed requirements.</p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Can I apply online for all services?</h3>
+              <p className="text-gray-600">Yes, most services are available online. Some services may require in-person verification for certain documents. Check individual service pages for specific requirements.</p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">How can I track my application status?</h3>
+              <p className="text-gray-600">You can track your application using the tracking number provided after submission. Visit the track page or use your application ID to get real-time updates.</p>
+            </div>
           </div>
         </div>
       </section>
